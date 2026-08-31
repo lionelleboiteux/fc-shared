@@ -17,9 +17,12 @@ setup.
   identical across all three sites. `<script src=".../ads.js" async></script>`
   in `<head>`, same publisher ID (`pub-6481777982811975`) as before.
 - **`feedback.js`** — `<fc-feedback project="pronos"></fc-feedback>`. Renders
-  a feedback textarea/submit card and posts to pronos's centralized
-  `/v1/feedback` endpoint (the only site with a backend), tagged with the
-  `project` attribute so submissions from all three sites land in one place.
+  an optional pseudo/email row, a message textarea, and a submit button, and
+  posts to pronos's centralized `/v1/feedback` endpoint (the only site with a
+  backend), tagged with the `project` attribute so submissions from all three
+  sites land in one place. Pseudo/email are never required to send feedback,
+  but when given they're stored alongside the message and included in the
+  notification email so there's someone to reply to.
 
 ## Usage
 

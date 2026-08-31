@@ -9,18 +9,25 @@
   if (customElements.get('fc-feedback')) return;
 
   var API_URL = 'https://dmytkubjxwwwkroutvdu.supabase.co/functions/v1/api/v1/feedback';
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var STYLE_ID = 'fc-feedback-style';
   var CSS = [
     'fc-feedback{display:block;background:var(--card,#fff);border:2px solid var(--accent,var(--fc-blue,#3d9be9));border-radius:16px;padding:1.1rem 1.25rem 1.25rem;margin-bottom:1.25rem;color:var(--ink,#1c1917);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}',
     'fc-feedback h2{font-size:1.15rem;margin:0 0 .6rem;text-align:center;}',
     '.fc-feedback-intro{color:var(--muted,#6b6560);font-size:.9rem;text-align:center;margin:0 0 .5rem;}',
-    '.fc-feedback-textarea{width:100%;padding:.55rem .7rem;border:1px solid var(--border,#d6d3d1);border-radius:8px;background:var(--card,#fff);color:var(--ink,#1c1917);font-size:.95rem;font-family:inherit;resize:vertical;box-sizing:border-box;}',
+    '.fc-feedback-contact-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.5rem;}',
+    '.fc-feedback-field{flex:1 1 10rem;min-width:0;}',
+    '.fc-feedback-label{display:block;font-size:.8rem;font-weight:600;margin:0 0 .2rem;}',
+    '.fc-feedback-input,.fc-feedback-textarea{width:100%;padding:.55rem .7rem;border:1px solid var(--border,#d6d3d1);border-radius:8px;background:var(--card,#fff);color:var(--ink,#1c1917);font-size:.95rem;font-family:inherit;box-sizing:border-box;}',
+    '.fc-feedback-textarea{resize:vertical;margin-top:.5rem;}',
     '.fc-feedback-submit{display:block;width:100%;margin-top:.75rem;padding:.6rem;background:var(--accent,var(--fc-blue,#3d9be9));color:var(--accent-ink,#fff);border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;}',
     '.fc-feedback-submit:disabled{opacity:.6;cursor:default;}',
     '.fc-feedback-message{font-size:.85rem;margin:.5rem 0 0;min-height:1.2em;}',
     '.fc-feedback-message.error{color:var(--error,#b91c1c);}',
     '.fc-feedback-message.ok{color:var(--ok,#15803d);}',
   ].join('');
+
+  var nextId = 0;
 
   function ensureStyle() {
     if (document.getElementById(STYLE_ID)) return;
@@ -46,9 +53,28 @@
     var project = host.getAttribute('project') || 'pronos';
     var titleText = host.getAttribute('title') || 'Une question, un problème, une suggestion ?';
     var introText = host.getAttribute('intro') || 'Vous avez des questions, problèmes ou suggestions ? Envoyez-les-nous !';
+    var uid = 'fc-feedback-' + (nextId += 1);
 
     host.appendChild(el('h2', { text: titleText }));
     host.appendChild(el('p', { class: 'fc-feedback-intro', text: introText }));
+
+    var pseudoInput = el('input', {
+      type: 'text', id: uid + '-pseudo', class: 'fc-feedback-input', maxlength: '60', autocomplete: 'nickname',
+    });
+    var emailInput = el('input', {
+      type: 'email', id: uid + '-email', class: 'fc-feedback-input', autocomplete: 'email',
+    });
+    var contactRow = el('div', { class: 'fc-feedback-contact-row' }, [
+      el('div', { class: 'fc-feedback-field' }, [
+        el('label', { class: 'fc-feedback-label', for: uid + '-pseudo', text: 'Pseudo (optionnel)' }),
+        pseudoInput,
+      ]),
+      el('div', { class: 'fc-feedback-field' }, [
+        el('label', { class: 'fc-feedback-label', for: uid + '-email', text: 'Email (optionnel)' }),
+        emailInput,
+      ]),
+    ]);
+    host.appendChild(contactRow);
 
     var textarea = el('textarea', {
       class: 'fc-feedback-textarea',
@@ -63,12 +89,24 @@
     host.appendChild(message);
     host.appendChild(submitBtn);
 
+    // Both fields are entirely optional (AC: neither pseudo nor email is
+    // required to send feedback) — this is only a fast UX check against a
+    // typo'd address; the server re-validates independently.
     submitBtn.addEventListener('click', function () {
       var value = textarea.value.trim();
+      var pseudo = pseudoInput.value.trim();
+      var email = emailInput.value.trim();
+
       if (!value) {
         message.className = 'fc-feedback-message error';
         message.textContent = 'Merci d’écrire un message avant d’envoyer.';
         textarea.focus();
+        return;
+      }
+      if (email && !EMAIL_RE.test(email)) {
+        message.className = 'fc-feedback-message error';
+        message.textContent = 'Adresse email invalide.';
+        emailInput.focus();
         return;
       }
       submitBtn.disabled = true;
@@ -78,7 +116,12 @@
       fetch(API_URL, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ message: value, project: project }),
+        body: JSON.stringify({
+          message: value,
+          project: project,
+          pseudo: pseudo || undefined,
+          email: email || undefined,
+        }),
       })
         .then(function (r) {
           return r.json().then(function (body) {
