@@ -33,14 +33,21 @@
  * verbatim from compos's Code.gs alongside this block.)
  *
  * Setup (once per project, in the Apps Script editor, after pasting this
- * block into Code.gs and redeploying): select setupFixturesTrigger_ in the
+ * block into Code.gs and redeploying): select setupFixturesTrigger in the
  * function dropdown and click Run — installs a 6h trigger that backfills
  * the whole season on its first run (well within Apps Script's 6-minute
  * trigger execution limit for a 34-gameweek season: ~34 sequential
  * UrlFetchApp calls) and thereafter keeps the near-term window fresh
  * against broadcast-driven kickoff reschedules. To see data immediately
  * rather than waiting for the first scheduled firing, also run
- * refreshFixtures_ once by hand right after.
+ * refreshFixtures once by hand right after.
+ *
+ * refreshFixtures and setupFixturesTrigger are deliberately named WITHOUT a
+ * trailing underscore, unlike every other helper in this file — the Apps
+ * Script editor's function-selector dropdown hides any top-level function
+ * whose name ends in `_` (its "private helper" convention), so a trailing
+ * underscore on either of these would make them impossible to run by hand
+ * from the editor. Keep it that way if you ever rename them.
  */
 
 var SEASON_GAMEWEEKS = 34;
@@ -132,7 +139,7 @@ function readFixturesForGameweek_(gameweekNumber) {
  * purposes (recordActualCompos_ in compos), just put to a different use
  * here, not a new endpoint. Returns [] (never a partial result) on any
  * failure, so a transient API hiccup can't overwrite already-cached good
- * data — see refreshFixtures_'s "only replace when non-empty" rule.
+ * data — see refreshFixtures's "only replace when non-empty" rule.
  */
 function buildFixtureRowsForGameweek_(gameweekNumber) {
   var journee = 'Journée ' + gameweekNumber;
@@ -166,7 +173,7 @@ function buildFixtureRowsForGameweek_(gameweekNumber) {
  * the doGet response cache version so the next request sees fresh data
  * immediately instead of waiting out the 6h TTL.
  */
-function refreshFixtures_() {
+function refreshFixtures() {
   var sheet = getOrCreateFixturesSheet_();
   var byGw = readAllFixtureRows_(sheet);
   var current = fetchCurrentGameweekNumber_();
@@ -204,13 +211,13 @@ function refreshFixtures_() {
 /**
  * One-time setup: run this once from the Apps Script editor to install the
  * 6h trigger. Re-running is safe — clears any trigger it previously
- * installed for refreshFixtures_ first, so triggers never stack up. Run
- * refreshFixtures_ once by hand afterward to populate the Fixtures tab
+ * installed for refreshFixtures first, so triggers never stack up. Run
+ * refreshFixtures once by hand afterward to populate the Fixtures tab
  * immediately instead of waiting for the first scheduled firing.
  */
-function setupFixturesTrigger_() {
+function setupFixturesTrigger() {
   ScriptApp.getProjectTriggers().forEach(function (t) {
-    if (t.getHandlerFunction() === 'refreshFixtures_') ScriptApp.deleteTrigger(t);
+    if (t.getHandlerFunction() === 'refreshFixtures') ScriptApp.deleteTrigger(t);
   });
-  ScriptApp.newTrigger('refreshFixtures_').timeBased().everyHours(6).create();
+  ScriptApp.newTrigger('refreshFixtures').timeBased().everyHours(6).create();
 }
