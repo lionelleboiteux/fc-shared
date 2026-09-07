@@ -15,7 +15,10 @@
 
   var STYLE_ID = 'fc-nav-style';
   var CSS = [
-    'fc-nav{display:block;}',
+    // Host pages (e.g. Wix) may give their own header a z-index in the
+    // tens; elevate fc-nav's own stacking context well above that so its
+    // dropdowns aren't painted over.
+    'fc-nav{display:block;position:relative;z-index:9999;}',
     '.site-banner{background:linear-gradient(180deg,var(--fc-blue-light,#63b0ee) 0%,var(--fc-blue,#3d9be9) 100%);color:#fff;margin:0 -1rem 1.5rem;padding:1.25rem 1rem 0;}',
     '.site-banner-top{display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap;text-align:center;}',
     '.site-logo{width:56px;height:56px;border-radius:50%;}',
