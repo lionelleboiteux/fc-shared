@@ -144,10 +144,11 @@
     });
   }
 
-  function toggleDropdown(item) {
-    var isOpen = item.classList.contains('open');
-    closeAllDropdowns();
-    if (isOpen) return;
+  // Always opens (never toggles closed) so a click doesn't fight the
+  // mouseenter that necessarily preceded it on a real desktop mouse.
+  // Closing is handled separately: mouseleave, outside click, or Escape.
+  function openDropdown(item) {
+    closeAllDropdowns(item);
     item.classList.add('open');
     var dd = item.querySelector('.nav-dropdown');
     var caret = item.querySelector('.nav-caret');
@@ -217,10 +218,10 @@
       var item = el('span', { class: 'nav-item' }, [link, caret, dropdown]);
       caret.addEventListener('click', function (e) {
         e.stopPropagation();
-        toggleDropdown(item);
+        openDropdown(item);
       });
       item.addEventListener('mouseenter', function () {
-        toggleDropdown(item);
+        openDropdown(item);
       });
       item.addEventListener('mouseleave', function () {
         item.classList.remove('open');
