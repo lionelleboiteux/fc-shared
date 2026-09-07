@@ -144,6 +144,21 @@
     });
   }
 
+  // Dropdowns default to centered under their parent link (see CSS), but
+  // that overflows the viewport for items near either edge (e.g. Ligue 1
+  // on a narrow phone screen) — clamp with real pixel math once it's
+  // visible and we can measure it.
+  function clampToViewport(item, dd) {
+    var itemRect = item.getBoundingClientRect();
+    var margin = 8;
+    var desiredLeft = itemRect.left + itemRect.width / 2 - dd.offsetWidth / 2;
+    var maxLeft = window.innerWidth - dd.offsetWidth - margin;
+    if (desiredLeft < margin) desiredLeft = margin;
+    if (desiredLeft > maxLeft) desiredLeft = maxLeft;
+    dd.style.left = desiredLeft - itemRect.left + 'px';
+    dd.style.transform = 'none';
+  }
+
   // Always opens (never toggles closed) so a click doesn't fight the
   // mouseenter that necessarily preceded it on a real desktop mouse.
   // Closing is handled separately: mouseleave, outside click, or Escape.
@@ -152,7 +167,10 @@
     item.classList.add('open');
     var dd = item.querySelector('.nav-dropdown');
     var caret = item.querySelector('.nav-caret');
-    if (dd) dd.hidden = false;
+    if (dd) {
+      dd.hidden = false;
+      clampToViewport(item, dd);
+    }
     if (caret) caret.setAttribute('aria-expanded', 'true');
   }
 
