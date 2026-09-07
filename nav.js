@@ -58,9 +58,9 @@
       label: 'Ligue 1',
       url: 'https://www.fantasy-coach.fr/ligue1',
       children: [
-        { label: 'Indisponibles / DNP', url: 'https://l1.dnp.fantasy-coach.fr/' },
+        { id: 'dnp', label: 'Indisponibles / DNP', url: 'https://l1.dnp.fantasy-coach.fr/' },
         { label: 'Suspendus au prochain jaune', url: 'https://www.fantasy-coach.fr/suspendus-prochain-jaune' },
-        { label: 'Compos', url: 'https://l1.compos.fantasy-coach.fr/' },
+        { id: 'compos', label: 'Compos', url: 'https://l1.compos.fantasy-coach.fr/' },
         { label: 'Groupes', url: 'https://www.fantasy-coach.fr/groupes' },
         { label: 'Mercato', url: 'https://www.fantasy-coach.fr/mercato' },
         { label: 'Indisponibles/DNP Last Update', url: 'https://www.fantasy-coach.fr/indisponibles-dnp-last-update' },
@@ -108,8 +108,6 @@
       ],
     },
     { id: 'pronos', label: 'Pronos', url: 'https://pronos.fantasy-coach.fr/' },
-    { id: 'dnp', label: 'Indispos', url: 'https://l1.dnp.fantasy-coach.fr/' },
-    { id: 'compos', label: 'Compos', url: 'https://l1.compos.fantasy-coach.fr/' },
   ];
 
   function ensureStyle() {
@@ -207,7 +205,11 @@
     var nav = el('nav', { class: 'site-nav' });
     LINKS.forEach(function (l, i) {
       var linkAttrs = { href: l.url, text: l.label };
-      if (l.id === current) linkAttrs.class = 'active';
+      // A page can be a dropdown child rather than a top-level link (e.g.
+      // dnp/compos live under Ligue 1) — highlight the parent in that case
+      // so `current="dnp"` still shows visitors where they are.
+      var matchesChild = l.children && l.children.some(function (c) { return c.id === current; });
+      if (l.id === current || matchesChild) linkAttrs.class = 'active';
       var link = el('a', linkAttrs);
 
       if (!l.children || !l.children.length) {
