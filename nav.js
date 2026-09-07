@@ -33,6 +33,7 @@
     { id: 'sorare', label: 'Sorare', url: 'https://www.fantasy-coach.fr/sorare' },
     { id: 'fpl', label: 'FPL', url: 'https://www.fantasy-coach.fr/fpl' },
     { id: 'bundesliga', label: 'Bundesliga', url: 'https://www.fantasy-coach.fr/bundesliga' },
+    { id: 'scandinavie', label: 'Scandinavie', url: 'https://www.fantasy-coach.fr/scandinavie' },
     { id: 'pronos', label: 'Pronos', url: 'https://pronos.fantasy-coach.fr/' },
     { id: 'dnp', label: 'Indispos', url: 'https://l1.dnp.fantasy-coach.fr/' },
     { id: 'compos', label: 'Compos', url: 'https://l1.compos.fantasy-coach.fr/' },
