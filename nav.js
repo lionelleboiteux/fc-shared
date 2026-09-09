@@ -21,7 +21,10 @@
     'fc-nav{display:block;position:relative;z-index:9999;}',
     '.site-banner{background:linear-gradient(180deg,var(--fc-blue-light,#63b0ee) 0%,var(--fc-blue,#3d9be9) 100%);color:#fff;margin:0 -1rem 1.5rem;padding:1.25rem 1rem 0;}',
     '.site-banner-top{display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap;text-align:center;}',
-    '.site-logo{width:56px;height:56px;border-radius:50%;}',
+    // height-only + width:auto keeps the shield's own aspect ratio;
+    // the old logo was pre-cropped square by Wix so a fixed 56x56 box
+    // never stretched it, but the new shield-shaped logo isn't square.
+    '.site-logo{height:56px;width:auto;}',
     '.site-title{display:block;font-size:1.5rem;font-weight:800;color:#fff;text-decoration:none;}',
     '.site-tagline{margin:.1rem 0 0;font-size:.82rem;opacity:.9;}',
     '.site-socials{display:flex;gap:.6rem;align-items:center;}',
