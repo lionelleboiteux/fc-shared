@@ -64,8 +64,6 @@
         { label: 'Suspendus au prochain jaune', url: 'https://www.fantasy-coach.fr/suspendus-prochain-jaune' },
         { id: 'compos', label: 'Compos', url: 'https://l1.compos.fantasy-coach.fr/' },
         { label: 'Groupes', url: 'https://www.fantasy-coach.fr/groupes' },
-        { label: 'Mercato', url: 'https://www.fantasy-coach.fr/mercato' },
-        { label: 'Indisponibles/DNP Last Update', url: 'https://www.fantasy-coach.fr/indisponibles-dnp-last-update' },
       ],
     },
     {
@@ -77,29 +75,8 @@
         { label: 'MPG', url: 'https://www.fantasy-coach.fr/mpg' },
       ],
     },
-    {
-      id: 'sorare',
-      label: 'Sorare',
-      url: 'https://www.fantasy-coach.fr/sorare',
-      children: [
-        { label: 'Tutos Sorare', url: 'https://www.fantasy-coach.fr/sorare/tuto-sorare' },
-        { label: 'Extraction Galerie', url: 'https://www.fantasy-coach.fr/sorare/sorare-extract' },
-        { label: 'Prize Pool Sorare', url: 'https://www.fantasy-coach.fr/sorare/rewards-prizepool-sorare' },
-        { label: 'Stats de gardiens', url: 'https://www.fantasy-coach.fr/sorare/stats-gardiens-sorare' },
-        { label: 'Calendrier GW', url: 'https://www.fantasy-coach.fr/sorare/calendrier-gw-sorare' },
-        { label: 'Rewards Points', url: 'https://www.fantasy-coach.fr/sorare/rewards-sorare' },
-      ],
-    },
     { id: 'fpl', label: 'FPL', url: 'https://www.fantasy-coach.fr/fpl' },
-    {
-      id: 'bundesliga',
-      label: 'Bundesliga',
-      url: 'https://www.fantasy-coach.fr/bundesliga',
-      children: [
-        { label: '1.Bundesliga', url: 'https://www.fantasy-coach.fr/1-bundesliga' },
-        { label: '2.Bundesliga', url: 'https://www.fantasy-coach.fr/2-bundesliga' },
-      ],
-    },
+    { id: 'bundesliga', label: 'Bundesliga', url: 'https://www.fantasy-coach.fr/bundesliga' },
     {
       id: 'scandinavie',
       label: 'Scandinavie',
