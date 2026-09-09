@@ -58,7 +58,7 @@
     {
       id: 'ligue1',
       label: 'Ligue 1',
-      url: 'https://www.fantasy-coach.fr/ligue1',
+      url: 'https://cms.fantasy-coach.fr/articles/ligue-1',
       children: [
         { id: 'dnp', label: 'Indisponibles / DNP', url: 'https://l1.dnp.fantasy-coach.fr/' },
         { label: 'Suspendus au prochain jaune', url: 'https://www.fantasy-coach.fr/suspendus-prochain-jaune' },
@@ -75,8 +75,8 @@
         { label: 'MPG', url: 'https://www.fantasy-coach.fr/mpg' },
       ],
     },
-    { id: 'fpl', label: 'FPL', url: 'https://www.fantasy-coach.fr/fpl' },
-    { id: 'bundesliga', label: 'Bundesliga', url: 'https://www.fantasy-coach.fr/bundesliga' },
+    { id: 'fpl', label: 'FPL', url: 'https://cms.fantasy-coach.fr/articles/premier-league' },
+    { id: 'bundesliga', label: 'Bundesliga', url: 'https://cms.fantasy-coach.fr/articles/bundesliga' },
     {
       id: 'scandinavie',
       label: 'Scandinavie',
