@@ -73,8 +73,8 @@
       label: 'Scandinavie',
       url: 'https://www.fantasy-coach.fr/scandinavie',
       children: [
-        { label: 'Eliteserien', url: 'https://www.fantasy-coach.fr/eliteserien' },
-        { label: 'Allsvenskan', url: 'https://www.fantasy-coach.fr/allsvenskan' },
+        { label: 'Eliteserien', url: 'https://cms.fantasy-coach.fr/articles/eliteserien' },
+        { label: 'Allsvenskan', url: 'https://cms.fantasy-coach.fr/articles/allsvenskan' },
       ],
     },
     { id: 'pronos', label: 'Pronos', url: 'https://pronos.fantasy-coach.fr/' },
