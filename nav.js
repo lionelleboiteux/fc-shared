@@ -66,15 +66,6 @@
         { label: 'Groupes', url: 'https://www.fantasy-coach.fr/groupes' },
       ],
     },
-    {
-      id: 'fantasy-l1',
-      label: 'Fantasy L1',
-      url: 'https://www.fantasy-coach.fr/fantasy-l1',
-      children: [
-        { label: 'LCDE', url: 'https://www.fantasy-coach.fr/lcde' },
-        { label: 'MPG', url: 'https://www.fantasy-coach.fr/mpg' },
-      ],
-    },
     { id: 'fpl', label: 'FPL', url: 'https://cms.fantasy-coach.fr/articles/premier-league' },
     { id: 'bundesliga', label: 'Bundesliga', url: 'https://cms.fantasy-coach.fr/articles/bundesliga' },
     {
