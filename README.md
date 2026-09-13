@@ -2,7 +2,8 @@
 
 Shared frontend components for the fantasy-coach.fr sibling sites
 ([pronos](https://pronos.fantasy-coach.fr/), [DNP](https://l1.dnp.fantasy-coach.fr/),
-[compos](https://l1.compos.fantasy-coach.fr/)). Plain, dependency-free Web
+[compos](https://l1.compos.fantasy-coach.fr/), [groupes](https://groupes.fantasy-coach.fr/)).
+Plain, dependency-free Web
 Components delivered straight from GitHub via jsDelivr — no build step, no
 npm, no bundler, so every site keeps its current $0-hosting, zero-tooling
 setup.
@@ -42,7 +43,7 @@ In the body, where the old inline nav/feedback markup used to be:
 <fc-feedback project="pronos"></fc-feedback>
 ```
 
-`current`/`project` values: `pronos`, `dnp`, `compos`.
+`current`/`project` values: `pronos`, `dnp`, `compos`, `groupes`.
 
 ## Rollout
 
