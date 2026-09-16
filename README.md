@@ -32,6 +32,14 @@ setup.
   visitor's actual choice — see the file's own doc comment for the one
   manual step (a Google-account setting, not code) that makes that gating
   actually take effect.
+- **`pageview.js`** — a first-party, server-side view counter, accurate
+  where `ga.js` structurally can't be (consent-gated, and blocked outright
+  by DuckDuckGo/Firefox/Brave/ad-blockers before consent even matters). A
+  bare fire-on-load script, not a custom element — reads which site it's
+  on from its own `data-project` attribute and posts one beacon to
+  pronos's centralized `/v1/page-view` endpoint, the same backend
+  `feedback.js` already posts to. `<script src=".../pageview.js"
+  data-project="dnp" async></script>` in `<head>`.
 
 ## Usage
 
@@ -42,6 +50,7 @@ In each site's `<head>`:
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/ads.js" async></script>
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/feedback.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/ga.js" async></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/pageview.js" data-project="dnp" async></script>
 ```
 
 In the body, where the old inline nav/feedback markup used to be:
