@@ -24,6 +24,14 @@ setup.
   sites land in one place. Pseudo/email are never required to send feedback,
   but when given they're stored alongside the message and included in the
   notification email so there's someone to reply to.
+- **`ga.js`** — the Google Analytics 4 (`gtag.js`) loader, one property
+  across every site rather than one per site (each hit already carries its
+  own hostname, so per-site traffic stays fully distinguishable in reports).
+  `<script src=".../ga.js" async></script>` in `<head>`. Consent Mode v2
+  defaults to denied until Funding Choices (`ads.js`) resolves the
+  visitor's actual choice — see the file's own doc comment for the one
+  manual step (a Google-account setting, not code) that makes that gating
+  actually take effect.
 
 ## Usage
 
@@ -33,6 +41,7 @@ In each site's `<head>`:
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/nav.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/ads.js" async></script>
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/feedback.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/ga.js" async></script>
 ```
 
 In the body, where the old inline nav/feedback markup used to be:
