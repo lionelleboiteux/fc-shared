@@ -62,7 +62,10 @@
       url: 'https://cms.fantasy-coach.fr/articles/ligue-1',
       children: [
         { id: 'dnp', label: 'Indisponibles / DNP', url: 'https://l1.dnp.fantasy-coach.fr/' },
-        { label: 'Suspendus au prochain jaune', url: 'https://www.fantasy-coach.fr/suspendus-prochain-jaune' },
+        {
+          label: 'Suspendus au prochain jaune',
+          url: 'https://l1.dnp.fantasy-coach.fr/suspensionsProchainJaune.html',
+        },
         { id: 'compos', label: 'Compos', url: 'https://l1.compos.fantasy-coach.fr/' },
         { id: 'groupes', label: 'Groupes', url: 'https://l1.groupes.fantasy-coach.fr/' },
       ],
