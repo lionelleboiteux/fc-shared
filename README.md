@@ -46,12 +46,15 @@ setup.
 In each site's `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/nav.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/ads.js" async></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/feedback.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/ga.js" async></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@main/pageview.js" data-project="dnp" async></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/nav.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/ads.js" async></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/feedback.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/ga.js" async></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/pageview.js" data-project="dnp" async></script>
 ```
+
+The `@ee6630a` above is the current pinned commit — see "Rollout" below before
+editing anything in this repo.
 
 In the body, where the old inline nav/feedback markup used to be:
 
@@ -65,8 +68,32 @@ In the body, where the old inline nav/feedback markup used to be:
 
 ## Rollout
 
-Pinned to the `@main` branch ref, so an edit here propagates to all three
-live sites on next page load (jsDelivr caches branch refs for ~12h — use
-jsDelivr's [purge API](https://www.jsdelivr.com/tools/purge) to force an
-immediate refresh). Switch a site to a pinned tag (e.g. `@v1.0.0`) instead if
-tighter control over when it picks up changes is ever needed.
+Every consuming site pins jsDelivr to a specific **commit SHA**, not
+`@main`. This used to be `@main`, on the theory that a branch ref meant an
+edit here reached every site automatically — in practice it meant an edit
+could sit unseen by a returning visitor for up to **7 days** (the browser's
+own cache for that exact script URL), even right after a jsDelivr purge:
+discovered live 2026-09-17, fixing the "Suspendus au prochain jaune" link
+in `nav.js` and having it still not show up anywhere.
+
+A commit SHA is immutable, so jsDelivr and every browser can cache it
+forever — the whole class of staleness goes away, but only if the pin
+actually gets bumped. **After any change to a file in this repo:**
+
+1. Commit and push.
+2. Grab the short SHA: `git rev-parse --short HEAD`.
+3. Replace the old SHA with the new one in every `fc-shared@<sha>` reference,
+   in every one of these files, and redeploy each:
+   - `arsene-cms/src/site/render.ts` — `FC_SHARED_REF` constant
+     (`src/site/render.ts`, near `FC_SHARED_HEAD`)
+   - `pronos/frontend/index.html`
+   - `DNP/frontend/index.html`
+   - `compos/frontend/index.html`
+   - `groupes/frontend/index.html`
+   - this README's own usage example above
+
+No purge needed — a new SHA is a new URL, so it's a cache miss everywhere,
+immediately, for every visitor. (A stale SHA in a site that wasn't updated
+just keeps serving the old, still-valid content — it doesn't 404 or error,
+so a missed site fails quietly, not loudly. Grep every repo above for the
+old SHA before considering a rollout done.)
