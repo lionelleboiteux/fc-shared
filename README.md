@@ -2,7 +2,8 @@
 
 Shared frontend components for the fantasy-coach.fr sibling sites
 ([pronos](https://pronos.fantasy-coach.fr/), [DNP](https://l1.dnp.fantasy-coach.fr/),
-[compos](https://l1.compos.fantasy-coach.fr/), [groupes](https://groupes.fantasy-coach.fr/)).
+[compos](https://l1.compos.fantasy-coach.fr/), [groupes](https://groupes.fantasy-coach.fr/),
+[presentations](https://l1.presentations.fantasy-coach.fr/)).
 Plain, dependency-free Web
 Components delivered straight from GitHub via jsDelivr — no build step, no
 npm, no bundler, so every site keeps its current $0-hosting, zero-tooling
@@ -40,6 +41,18 @@ setup.
   pronos's centralized `/v1/page-view` endpoint, the same backend
   `feedback.js` already posts to. `<script src=".../pageview.js"
   data-project="dnp" async></script>` in `<head>`.
+- **`team-form.js`** — `<fc-team-form team="Marseille" league="L1" reversed></fc-team-form>`.
+  A team's last 5 **league** results (cup/European competitions have no data
+  source anywhere) as colored letters — G/N/P (green/amber/red) for
+  win/draw/loss, oldest on the left, newest on the right. The `reversed`
+  boolean attribute mirrors that (newest-left/oldest-right), for an
+  away-team row shown alongside the home team's. Hovering a letter shows
+  the full score, home-first, using each side's short code (e.g.
+  "PSG 2-1 OM"). Fetches from pronos's centralized `/v1/teams/form`
+  endpoint, the same backend as `feedback.js`/`pageview.js`; recomputed
+  server-side on the existing hourly fixture-ingest cron, not by this
+  script. `league` defaults to `"L1"` (pronos' `leagues.code` for Ligue 1),
+  the only league seeded with team short names/codes today.
 
 ## Usage
 
@@ -51,6 +64,7 @@ In each site's `<head>`:
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/feedback.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/ga.js" async></script>
 <script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/pageview.js" data-project="dnp" async></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@ee6630a/team-form.js" defer></script>
 ```
 
 The `@ee6630a` above is the current pinned commit — see "Rollout" below before
@@ -62,9 +76,11 @@ In the body, where the old inline nav/feedback markup used to be:
 <fc-nav current="pronos"></fc-nav>
 ...
 <fc-feedback project="pronos"></fc-feedback>
+...
+<fc-team-form team="Marseille" league="L1"></fc-team-form>
 ```
 
-`current`/`project` values: `pronos`, `dnp`, `compos`, `groupes`.
+`current`/`project` values: `pronos`, `dnp`, `compos`, `groupes`, `presentations`.
 
 ## Rollout
 
@@ -90,6 +106,7 @@ actually gets bumped. **After any change to a file in this repo:**
    - `DNP/frontend/index.html`
    - `compos/frontend/index.html`
    - `groupes/frontend/index.html`
+   - `presentations/frontend/index.html`
    - this README's own usage example above
 
 No purge needed — a new SHA is a new URL, so it's a cache miss everywhere,
