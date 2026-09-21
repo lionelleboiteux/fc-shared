@@ -59,15 +59,15 @@ setup.
 In each site's `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@5aab826/nav.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@5aab826/ads.js" async></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@5aab826/feedback.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@5aab826/ga.js" async></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@5aab826/pageview.js" data-project="dnp" async></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@5aab826/team-form.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/nav.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/ads.js" async></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/feedback.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/ga.js" async></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/pageview.js" data-project="dnp" async></script>
+<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/team-form.js" defer></script>
 ```
 
-The `@5aab826` above is the current pinned commit — see "Rollout" below before
+The `@e2cb2f0` above is the current pinned commit — see "Rollout" below before
 editing anything in this repo.
 
 In the body, where the old inline nav/feedback markup used to be:
