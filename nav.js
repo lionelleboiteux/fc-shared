@@ -66,6 +66,10 @@
           label: 'Suspendus au prochain jaune',
           url: 'https://l1.dnp.fantasy-coach.fr/suspensionsProchainJaune.html',
         },
+        {
+          label: 'Matchs en sélection',
+          url: 'https://l1.dnp.fantasy-coach.fr/matchs-en-selection.html',
+        },
         { id: 'compos', label: 'Compos', url: 'https://l1.compos.fantasy-coach.fr/' },
         { id: 'groupes', label: 'Groupes', url: 'https://l1.groupes.fantasy-coach.fr/' },
       ],
