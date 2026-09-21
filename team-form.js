@@ -29,7 +29,7 @@
     'fc-team-form{display:inline-flex;gap:.3rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}',
     '.fc-team-form-letter{display:inline-flex;align-items:center;justify-content:center;width:1.4rem;height:1.4rem;border-radius:4px;font-size:.75rem;font-weight:700;color:#fff;cursor:default;}',
     '.fc-team-form-letter.win{background:var(--ok,#15803d);}',
-    '.fc-team-form-letter.draw{background:var(--warn,#b45309);}',
+    '.fc-team-form-letter.draw{background:var(--warn,#a16207);}',
     '.fc-team-form-letter.loss{background:var(--error,#b91c1c);}',
     '.fc-team-form-empty{color:var(--muted,#6b6560);font-size:.8rem;}',
   ].join('');
