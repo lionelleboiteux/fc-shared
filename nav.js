@@ -61,6 +61,7 @@
       label: 'Ligue 1',
       url: 'https://cms.fantasy-coach.fr/articles/ligue-1',
       children: [
+        { label: 'Articles', url: 'https://cms.fantasy-coach.fr/articles/ligue-1' },
         { id: 'dnp', label: 'Indisponibles / DNP', url: 'https://l1.dnp.fantasy-coach.fr/' },
         {
           label: 'Suspendus au prochain jaune',
