@@ -5,7 +5,7 @@ Shared frontend components for the fantasy-coach.fr sibling sites
 [compos](https://l1.compos.fantasy-coach.fr/), [groupes](https://groupes.fantasy-coach.fr/),
 [presentations](https://l1.presentations.fantasy-coach.fr/)).
 Plain, dependency-free Web
-Components delivered straight from GitHub via jsDelivr — no build step, no
+Components served from assets.fantasy-coach.fr (Cloudflare Pages) — no build step, no
 npm, no bundler, so every site keeps its current $0-hosting, zero-tooling
 setup.
 
@@ -59,12 +59,12 @@ setup.
 In each site's `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/nav.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/ads.js" async></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/feedback.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/ga.js" async></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/pageview.js" data-project="dnp" async></script>
-<script src="https://cdn.jsdelivr.net/gh/lionelleboiteux/fc-shared@e2cb2f0/team-form.js" defer></script>
+<script src="https://assets.fantasy-coach.fr/nav.js" defer></script>
+<script src="https://assets.fantasy-coach.fr/ads.js" async></script>
+<script src="https://assets.fantasy-coach.fr/feedback.js" defer></script>
+<script src="https://assets.fantasy-coach.fr/ga.js" async></script>
+<script src="https://assets.fantasy-coach.fr/pageview.js" data-project="dnp" async></script>
+<script src="https://assets.fantasy-coach.fr/team-form.js" defer></script>
 ```
 
 The `@e2cb2f0` above is the current pinned commit — see "Rollout" below before
@@ -84,33 +84,20 @@ In the body, where the old inline nav/feedback markup used to be:
 
 ## Rollout
 
-Every consuming site pins jsDelivr to a specific **commit SHA**, not
-`@main`. This used to be `@main`, on the theory that a branch ref meant an
-edit here reached every site automatically — in practice it meant an edit
-could sit unseen by a returning visitor for up to **7 days** (the browser's
-own cache for that exact script URL), even right after a jsDelivr purge:
-discovered live 2026-09-17, fixing the "Suspendus au prochain jaune" link
-in `nav.js` and having it still not show up anywhere.
-
-A commit SHA is immutable, so jsDelivr and every browser can cache it
-forever — the whole class of staleness goes away, but only if the pin
-actually gets bumped. **After any change to a file in this repo:**
+The scripts are served from `https://assets.fantasy-coach.fr/` (Cloudflare
+Pages project `fc-shared`), **unpinned**: every consuming site loads the
+same URL, so a change here reaches all of them with no per-site edit or
+redeploy. **After any change to a file in this repo:**
 
 1. Commit and push.
-2. Grab the short SHA: `git rev-parse --short HEAD`.
-3. Replace the old SHA with the new one in every `fc-shared@<sha>` reference,
-   in every one of these files, and redeploy each:
-   - `arsene-cms/src/site/render.ts` — `FC_SHARED_REF` constant
-     (`src/site/render.ts`, near `FC_SHARED_HEAD`)
-   - `pronos/frontend/index.html`
-   - `DNP/frontend/index.html`
-   - `compos/frontend/index.html`
-   - `groupes/frontend/index.html`
-   - `presentations/frontend/index.html`
-   - this README's own usage example above
+2. Run `./deploy.sh` (publishes the top-level `*.js` files; needs `wrangler`
+   logged in to the fantasycoachfr@gmail.com account).
 
-No purge needed — a new SHA is a new URL, so it's a cache miss everywhere,
-immediately, for every visitor. (A stale SHA in a site that wasn't updated
-just keeps serving the old, still-valid content — it doesn't 404 or error,
-so a missed site fails quietly, not loudly. Grep every repo above for the
-old SHA before considering a rollout done.)
+Visitors pick the change up once their cached copy expires. `_headers` asks
+for 5 minutes, but the zone's Browser Cache TTL setting is 4 hours and
+overrides it on this free plan, so allow up to ~4h. This replaces the old
+jsDelivr setup: `@main` could sit unseen for 7 days, and the SHA-pinning
+workaround needed six sites bumped and redeployed per change.
+
+Trade-off: a bad deploy reaches every site at once. To roll back, revert the
+commit and run `./deploy.sh` again.
