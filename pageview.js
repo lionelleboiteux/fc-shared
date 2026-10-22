@@ -15,15 +15,18 @@
  * attribute, since a plain <script> has nowhere else to carry it.
  */
 (function () {
-  var API_URL = 'https://dmytkubjxwwwkroutvdu.supabase.co/functions/v1/api/v1/page-view';
+  var API_URL = 'https://api.fantasy-coach.fr/v1/page-view';
 
   var script = document.currentScript;
   var project = script && script.getAttribute('data-project');
   if (!project) return;
 
+  // text/plain keeps this a CORS "simple request": the API parses the body as
+  // JSON whatever the content-type, and skipping the OPTIONS preflight halves
+  // the metered Edge Function invocations this beacon costs.
   fetch(API_URL, {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'text/plain' },
     body: JSON.stringify({ project: project }),
     keepalive: true,
   }).catch(function () {

@@ -23,7 +23,7 @@
 (function () {
   if (customElements.get('fc-team-form')) return;
 
-  var API_URL = 'https://dmytkubjxwwwkroutvdu.supabase.co/functions/v1/api/v1/teams/form';
+  var API_URL = 'https://api.fantasy-coach.fr/v1/teams/form';
   var STYLE_ID = 'fc-team-form-style';
   var CSS = [
     'fc-team-form{display:inline-flex;gap:.3rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}',
@@ -74,6 +74,37 @@
     host.appendChild(el('span', { class: 'fc-team-form-empty', text: text }));
   }
 
+  // Each Edge Function call is metered, and a page can mount the same team's
+  // widget several times: share one in-flight request per team and remember
+  // the answer for an hour in sessionStorage across page loads.
+  var inflight_ = {};
+  var STORE_TTL_MS = 3600000;
+
+  function fetchForm_(league, team) {
+    var key = 'fc-team-form:' + league + ':' + team;
+    try {
+      var saved = JSON.parse(sessionStorage.getItem(key) || 'null');
+      if (saved && Date.now() - saved.at < STORE_TTL_MS) return Promise.resolve(saved.data);
+    } catch (e) {}
+    if (inflight_[key]) return inflight_[key];
+    inflight_[key] = fetch(API_URL + '?league=' + encodeURIComponent(league) + '&name=' + encodeURIComponent(team))
+      .then(function (r) {
+        return r.ok ? r.json() : Promise.reject(r.status);
+      })
+      .then(function (data) {
+        try {
+          sessionStorage.setItem(key, JSON.stringify({ at: Date.now(), data: data }));
+        } catch (e) {}
+        delete inflight_[key];
+        return data;
+      })
+      .catch(function (err) {
+        delete inflight_[key];
+        throw err;
+      });
+    return inflight_[key];
+  }
+
   function render(host) {
     var team = host.getAttribute('team');
     var league = host.getAttribute('league') || 'L1';
@@ -82,10 +113,7 @@
 
     renderEmpty_(host, '…');
 
-    fetch(API_URL + '?league=' + encodeURIComponent(league) + '&name=' + encodeURIComponent(team))
-      .then(function (r) {
-        return r.ok ? r.json() : Promise.reject(r.status);
-      })
+    fetchForm_(league, team)
       .then(function (data) {
         var results = data.results || [];
         if (results.length === 0) {
